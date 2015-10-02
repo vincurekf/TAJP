@@ -30,7 +30,7 @@ if( $method == 'POST' ){
 }elseif( $method == 'GET' ){
 	parse_str($_SERVER['QUERY_STRING'], $params);
 }
-
+//echo print_r($params);
 // odstranit z parametru data ktera se do databaze ukladat nebudou
 // akce kterou volas, a tabulka do který to vkladas
 unset($params['id']);

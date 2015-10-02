@@ -15,6 +15,7 @@ exampleApp.controller('AppCtrl', function ($scope, $rootScope) {
       // pro kazdej parametr pridat ke stringu "id=parametr&" 
         vars += id+'='+params[id]+'&'; 
       };
+      console.log( url, vars );
       // připravit request
       xhr.open("POST", url, true);
       // nastavit content header aby se daly posilat parametry v requestu
@@ -76,12 +77,21 @@ exampleApp.controller('AppCtrl', function ($scope, $rootScope) {
   };
   $rootScope.fetchItems();
 
+
+});
+
+exampleApp.controller('HomeCtrl', function ($scope, $rootScope) {
+  console.log('HomeCtrl');
+  $scope.newItem = {};
+  
   // vlozit data do databaze
-  $rootScope.insertItem = function(newItem){
+  $scope.insertItem = function(newItem){
+    console.log( newItem );
     $rootScope.ajax.post('api/api.php', 'insert', 'test', newItem, function( result ){
       if( !result.error ){
         newItem.id = result.id;
         $rootScope.completeData.push( newItem );
+        $scope.newItem = {};
         $rootScope.$apply();
       }
       console.log( result );
@@ -89,14 +99,14 @@ exampleApp.controller('AppCtrl', function ($scope, $rootScope) {
   }
   
   // aktualizovat data v databazi
-  $rootScope.updateItem = function( item ){
+  $scope.updateItem = function( item ){
     $rootScope.ajax.post('api/api.php', 'update', 'test', item, function( result ){
       console.log( result );
     });
   }
   
   // smazat data z databaze
-  $rootScope.deleteItem = function( item ){
+  $scope.deleteItem = function( item ){
     var r = confirm("Delete item with ID: "+item.id+"!");
     if (r == true) {
       $rootScope.ajax.post('api/api.php', 'delete', 'test', { id: item.id }, function( result ){
@@ -112,12 +122,6 @@ exampleApp.controller('AppCtrl', function ($scope, $rootScope) {
       });
     }
   }
-
-});
-
-exampleApp.controller('HomeCtrl', function ($scope, $rootScope) {
-  console.log('HomeCtrl');
-  $scope.newItem = {};
 });
 
 exampleApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
