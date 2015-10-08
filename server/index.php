@@ -31,6 +31,12 @@ $app->add(new \Slim\Middleware\JwtAuthentication([
   }
 ]));
 
+$corsOptions = array(
+  "origin" => "*",
+  "allowCredentials" => True
+);
+$app->add(new \CorsSlim\CorsSlim($corsOptions));
+
 // API for users
 // GET all users
 $app->get('/api/users', function () use ($app, $database) {

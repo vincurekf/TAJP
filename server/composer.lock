@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3b533e5ca92049b124d67e57e71156e4",
-    "content-hash": "95ad882399dc8fa070a0a21f4e15723a",
+    "hash": "de86ba2bfa696c4e2013e90d35a1ca28",
+    "content-hash": "8434be173678580ee4eaeaa5b4f0b2f5",
     "packages": [
         {
             "name": "catfan/medoo",
@@ -104,6 +104,50 @@
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
             "time": "2015-07-22 18:31:08"
+        },
+        {
+            "name": "palanik/corsslim",
+            "version": "v0.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palanik/CorsSlim.git",
+                "reference": "e315799762352028e24735f14bebdf63f9135cc8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palanik/CorsSlim/zipball/e315799762352028e24735f14bebdf63f9135cc8",
+                "reference": "e315799762352028e24735f14bebdf63f9135cc8",
+                "shasum": ""
+            },
+            "require": {
+                "slim/slim": ">=2.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CorsSlim\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "palanik"
+                }
+            ],
+            "description": "Cross-origin resource sharing (CORS) middleware for PHP Slim.",
+            "homepage": "https://github.com/palanik/CorsSlim",
+            "keywords": [
+                "cors",
+                "corsslim",
+                "cross-origin",
+                "preflight",
+                "slim",
+                "slimphp"
+            ],
+            "time": "2015-04-29 01:21:37"
         },
         {
             "name": "psr/log",
