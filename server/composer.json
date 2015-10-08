@@ -1,0 +1,7 @@
+{
+    "require": {
+        "catfan/Medoo": "^0.9.8",
+        "slim/slim": "~2.0",
+        "tuupola/slim-jwt-auth": "^1.0"
+    }
+}
