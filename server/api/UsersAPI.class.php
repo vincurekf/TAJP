@@ -7,7 +7,6 @@ Class UsersAPI {
   
   public function __construct(){
     //
-    echo "sdagvfds";
   }
 
   public function get( $database ){
