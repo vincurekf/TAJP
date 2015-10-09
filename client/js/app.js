@@ -17,7 +17,6 @@ angular.module('BasicHttpAuthExample', [
   $rootScope.$on('$locationChangeStart', function (event, next, current) {
     var isEmpty = Object.keys( $rootScope.globals.token ).length === 0 ? true : false;
     var isExpired = !isEmpty ? jwtHelper.isTokenExpired( $rootScope.globals.token ) : false;
-    console.log( isExpired );
     // redirect to login page if not logged in
     if ( ($location.path() !== '/login' && !window.localStorage['jwt_token']) || isExpired ) {
       $location.path('/login');
@@ -29,9 +28,6 @@ angular.module('BasicHttpAuthExample', [
 function ( $routeProvider, $httpProvider, jwtInterceptorProvider ) {
   // Please note we're annotating the function so that the $injector works when the file is minified
   jwtInterceptorProvider.tokenGetter = function() {
-    //
-    console.log( window.localStorage['jwt_token'] );
-    //
     return window.localStorage['jwt_token'];
   };
   $httpProvider.interceptors.push('jwtInterceptor');
@@ -68,7 +64,7 @@ function ($scope, $rootScope, $location, tokenService, jwtHelper) {
         tokenService.set(response.token);
         $location.path('/');
       } else {
-        $scope.error = response.message;
+        $scope.error = response.error;
         $scope.dataLoading = false;
       }
     });
@@ -81,7 +77,6 @@ function ($scope, $rootScope, $location, tokenService, jwtHelper) {
 function ( $scope, $rootScope, $location, tokenService, $http ) {
   //
   $scope.logout = function () {
-    console.log( 'logout' );
     tokenService.clear()
     $location.path('/login');
   };

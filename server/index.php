@@ -1,13 +1,12 @@
 <?php
 // require composer autoload
 require 'vendor/autoload.php';
-
 // include config
 require 'config/config.php';
-// require needed classes and functions
-require 'helpers/jwt.php';
-require 'helpers/crypto_rand.php';
-require 'helpers/login.php';
+// require helpers autoload
+require 'helpers/autoload.php';
+// require API autoload
+require 'api/autoload.php';
 
 // Initialize database connection
 $database = new medoo([
@@ -19,11 +18,15 @@ $database = new medoo([
   'charset' => 'utf8'
 ]);
 
-// Create and configure Slim app
+/*
+ * Configure Slim app
+ * 1. Create Slim app
+ * 2. Add JWT middleware for json web token authentication
+ * 3. Allow CORS request so itl will accept calls from other domains
+ */
+// 1
 $app = new \Slim\Slim();
-
-// JWT middleware
-// handles authentication via json web token
+// 2
 $app->add(new \Slim\Middleware\JwtAuthentication([
   "secret" => base64_decode(JWT_SECRET),
   "path" => ["/api"] ,
@@ -31,24 +34,23 @@ $app->add(new \Slim\Middleware\JwtAuthentication([
     $app->jwt = $options["decoded"];
   }
 ]));
-
-// allow CORS requests
-$corsOptions = array(
+// 3
+$app->add(new \CorsSlim\CorsSlim( array(
   "origin" => "*",
   "allowCredentials" => True
-);
-$app->add(new \CorsSlim\CorsSlim($corsOptions));
+)));
 
-// API for users
-// GET all users
+/*
+ * API ROUTES
+ */
+
+// get all users
 $app->get('/api/users', function () use ($app, $database) {
   $users = $database->select("accounts","*");
   echo json_encode( $users );
 });
-// POST new user (register)
-// TODO
+// add new user
 $app->post('/api/users', function () use ($app, $database) {
-  // add new user
   /*
     // Insert entry
     $last_user_id = $database->insert('accounts', [
@@ -59,36 +61,26 @@ $app->post('/api/users', function () use ($app, $database) {
     echo $last_user_id;
   */
 });
-// PUT data to user (update)
-// TODO
+// update user
 $app->put('/api/users', function () use ($app, $database) {
-  // update user
+});
+// delete user
+$app->delete('/api/users', function () use ($app, $database) {
 });
 
-// LOGIN route, handles login
-// based on given username and password
+/*
+ * LOGIN route, handles login
+ * based on given username and password
+ */
 $app->post('/login', function () use ($app, $database) {
   $credentials = json_decode($app->request->getBody());
-  // Get user by username
-  $users = $database->select("accounts", 
-    [
-      "id",
-      "user_name",
-      "password"
-    ],[
-      "user_name" => $credentials->user_name
-    ]
-  );
-  // if user was found
-  if( count($users) > 0 ){
-    $user = $users[0];
-    Login( $user, $credentials );
-  }else{
-    echo json_encode( Array( "error" => "No match for username ".$credentials->user_name ) );
-  };
+  // log in the user with given credentials
+  $loginStatus = Login( $credentials, $database );
+  // return the succes/error state to javascript
+  echo json_encode( $loginStatus );
 });
 
-// Run app
+// Run Slim app
 $app->run();
 
 ?>

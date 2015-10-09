@@ -1,9 +1,15 @@
-<h1>Home</h1>
-<a href="#" ng-click="logout()">Logout</a>
+<div class="row">
+  <div id="content" class="large-12 columns">
 
-<h2>Users</h2>
-<ul>
-	<li ng-repeat="user in users">
-		{{ user.user_name }}
-	</li>
-</ul>
+		<h1>Home</h1>
+		<a href="#" class="tiny button" ng-click="logout()">Logout</a>
+
+		<h2>Users</h2>
+		<ul>
+			<li ng-repeat="user in users">
+				{{ user.user_name }}: {{ user.user_email }}
+			</li>
+		</ul>
+
+	</div>
+</div>
