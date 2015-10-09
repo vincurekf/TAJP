@@ -2,19 +2,20 @@
 <div class="row">
   <div id="content" class="large-12 columns">
     
-    <h3>Login</h3>
+    <h3>Register new account</h3>
     <div ng-show="error" class="alert alert-danger">{{error}}</div>
-    <form name="form" ng-submit="login(credentials)" role="form">
-      <label for="username">Username</label>
-      <input type="text" name="username" id="username" class="form-control" ng-model="credentials.username" required />
+    <form name="form" ng-submit="register(newUser)" role="form">
+      <label for="user_name">Username</label>
+      <input type="text" name="user_name" id="user_name" class="form-control" ng-model="newUser.user_name" required />
+      <label for="user_email">Email</label>
+      <input type="text" name="user_email" id="user_email" class="form-control" ng-model="newUser.user_email" required />
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" class="form-control" ng-model="credentials.password" required />
-      <label>Keep me logged <input type="checkbox" ng-model="credentials.keeplogged"></label>
+      <input type="password" name="password" id="password" class="form-control" ng-model="newUser.password" required />
       <div class="form-actions">
-        <button type="submit" ng-disabled="form.$invalid || dataLoading" class="small expand">Login</button>
+        <button type="submit" ng-disabled="form.$invalid || dataLoading" class="small expand">Register</button>
         <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
       </div>
     </form>
-    <a href="#/register">Register</a>
+    <a href="#/login">Back to login</a>
   </div><!-- #content -->
 </div>

@@ -71,6 +71,14 @@ $app->post('/login', function () use ($app, $database) {
   // return the succes/error state to javascript
   echo json_encode( $loginStatus );
 });
+/*
+ * REGISTER route, handles registration
+ */
+$app->post('/register', function () use ($app, $database) {
+  $data = json_decode( $app->request->getBody() );
+  $userId = UsersAPI::post( $database, $data );
+  echo json_encode( $userId );
+});
 
 // Run Slim app
 $app->run();

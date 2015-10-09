@@ -28,15 +28,20 @@ $borderRadius: 4px;
 
 // Typography
 $font: "Open Sans", "Helvetica", "Arial", sans-serif;
+$line-height: 1.5rem;
 
 
 * { box-sizing: border-box; }
-html { font-size: 16px; }
+html { font-size: 16px; line-height: $line-height; }
 body { font-family: $font; cursor: default; }
 a {
 	text-decoration: none; color: $primary;
 	&:hover { color: darken($primary, 10%); }
 	&:focus { outline: none; }
+}
+
+h1, h2, h3, h4, h5 {
+	font-feature-settings: "dlig", "liga", "kern"; // for beautiful typography & ligatures
 }
 
 
@@ -96,10 +101,6 @@ a {
 	&.collapse .columns { padding: 0; }
 	&.narrow .column,
 	&.narrow .columns { padding: 0 ($gutterWidth / 2); }
-	.row {
-		//margin: 0 (-$gutterWidth);
-		&.narrow { margin: 0 (-$gutterWidth/2); }
-	}
 }
 .column,
 .columns {
@@ -237,34 +238,50 @@ iframe { display: block; max-width: 100%; }
 }
 
 
+.show-grid { // inspired by https://sassline.com
+	background-image: linear-gradient(to bottom, #0ff 0px, rgba(255, 255, 255, 0) 1px);
+  background-repeat: repeat-y;
+  background-size: 100% 1rem;
+}
+
 
 // ------ UI ELEMENTS ------ //
 
 .button, button {
-	font-weight: bold; text-decoration: none; color: inherit; font-size: 1rem;
+	font-weight: bold; text-decoration: none; color: $white;
 	display: inline-block; padding: 0.7rem 1.2rem;
-	border: 3px solid $primary; border-radius: $borderRadius; background: none;
+	background: $primary; border-radius: $borderRadius; border: none;
 	@extend .tfx;
-	&:hover { background: $primary; color: $white; }
+	&:hover { background: darken($primary, 7%); color: $white; }
+	&.toggled { background: darken($primary, 10%); box-shadow: 0 3px darken($primary, 24%) inset; }
+
+	// Button Sizes
 	&.tiny { padding: 0.3rem 0.7rem; font-size: 0.65rem; }
 	&.small { padding: 0.5rem 0.95rem; font-size: 0.825rem; }
 	&.large { padding: 0.9rem 1.45rem; font-size: 1.125rem; }
 	&.expand { width: 100%; }
+	
+	// Button Variants/Mods
 	&.secondary {
-		border-color: $secondary;
-		&:hover { background: $secondary; }
+		color: $black;
+		background: $secondary;
+		&:hover { background: darken($secondary, 7%); }
+		&.toggled { background: darken($secondary, 10%); box-shadow: 0 3px darken($secondary, 24%) inset; }
 	}
 	&.success {
-		border-color: $success;
-		&:hover { background: $success; }
+		background: $success;
+		&:hover { background: darken($success, 7%); }
+		&.toggled { background: darken($success, 10%); box-shadow: 0 3px darken($success, 24%) inset; }
 	}
 	&.alert {
-		border-color: $alert;
-		&:hover { background: $alert; }
+		background: $alert;
+		&:hover { background: darken($alert, 7%); }
+		&.toggled { background: darken($alert, 10%); box-shadow: 0 3px darken($alert, 24%) inset; }
 	}
 	&.warning {
-		border-color: $warning;
-		&:hover { background: $warning; }
+		background: $warning;
+		&:hover { background: darken($warning, 7%); }
+		&.toggled { background: darken($warning, 10%); box-shadow: 0 3px darken($warning, 24%) inset; }
 	}
 }
 
@@ -280,7 +297,9 @@ iframe { display: block; max-width: 100%; }
 table {
 	tr {
 		border-bottom: 1px solid #ddd;
+		th { text-align: left; }
 	}
+
 	&.expand { width: 100%; }
 }
 

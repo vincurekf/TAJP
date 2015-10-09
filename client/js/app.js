@@ -64,7 +64,7 @@ app.run(['$rootScope', '$location', '$http', 'jwtHelper', 'tokenService', functi
     var keeplogged = parseInt( window.localStorage['keeplogged'] ) === 1 ? true : false;
     console.log( keeplogged );
     // redirect to login page if not logged in
-    if ( ($location.path() !== '/login' && !window.localStorage['jwt_token']) || isExpired ) {
+    if ( ($location.path() !== '/login' && $location.path() !== '/register' && !window.localStorage['jwt_token']) || isExpired ) {
       if( keeplogged ){
         var credentials = {
           username: window.localStorage['username'],

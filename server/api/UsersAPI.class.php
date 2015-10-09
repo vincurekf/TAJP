@@ -14,12 +14,18 @@ Class UsersAPI {
   }
 
   public function post( $database, $data ){
+    // user exists
+    $exists = $database->select("accounts", "*",[ "user_name" => $data->user_name ]);
   	// Insert entry
-    $last_user_id = $database->insert('accounts', [
-      'user_name' => $data['user_name'],
-      'user_email' => $data['user_email'],
-      'password' => $data['password']
-    ]);
-    return $last_user_id;
+    if( count($exists) == 0 ){
+      $last_user_id = $database->insert('accounts', [
+        'user_name' => $data->user_name,
+        'user_email' => $data->user_email,
+        'password' => $data->password
+      ]);
+      return Array( "success" => true, "user_id" => $last_user_id );
+    }else{
+      return Array( "error" => "Username ".$data->user_name." is taken." );
+    }
   }
 }
