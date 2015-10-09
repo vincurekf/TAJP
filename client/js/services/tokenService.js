@@ -24,7 +24,7 @@ function (Base64, $http, $rootScope, $timeout) {
     window.localStorage['jwt_token'] = '';
   };
   return service;
-}])
+}]);
 
 app.factory('Base64', function () {
   /* jshint ignore:start */

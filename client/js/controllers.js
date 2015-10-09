@@ -16,29 +16,6 @@ function ($scope, $rootScope, $location, tokenService, jwtHelper) {
   }else{
     $location.path('/');
   }
-
-  $rootScope.login = function ( username, password, stay ) {
-    username = username || $scope.username;
-    password = password || $scope.password;
-    $scope.dataLoading = true;
-    tokenService.Login(username, password, function(response) {
-      if(response.success) {
-        tokenService.set(response.token);
-        if( $scope.keeplogged ){
-          window.localStorage['keeplogged'] = 1;
-          window.localStorage['username'] = username;
-          window.localStorage['password'] = password;
-        };
-        if( !stay ){
-        	console.log( 'stay' );	
-          $location.path('/');
-        }
-      } else {
-        $scope.error = response.error;
-        $scope.dataLoading = false;
-      }
-    });
-  };
 }]);
 
 app.controller('HomeController', 

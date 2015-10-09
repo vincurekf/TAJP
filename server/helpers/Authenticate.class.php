@@ -22,7 +22,13 @@ Class Authenticate {
       $db_password = $user["password"];
       // if password matches
       if( $db_password === $credentials->password ){
-        $jwt = Authenticate::generateToken( $db_id, $db_name );
+        $jwt = self::generateToken( $db_id, $db_name );
+        $database->update("accounts", [
+          "last_login" => date("Y-m-d H:i:s"),
+          "last_token" => $jwt
+        ], [
+          "id" => $db_id
+        ]);
         // return the final array with token
         return Array( "success" => true, "token" => $jwt );
       }else{
@@ -32,13 +38,13 @@ Class Authenticate {
       return Array( "error" => "User ".$credentials->user_name." does not exist." );
     };
   }
-  private function generateToken( $user_id, $user_name ){
+  public function generateToken( $user_id, $user_name ){
     // setup token data
-    $tokenId    = Authenticate::getTokenId(64);
+    $tokenId    = self::getTokenId(64);
     $issuedAt   = time();
-    $notBefore  = $issuedAt;   //Adding 10 seconds
-    $expire     = $notBefore + (JWT_EXPIRE*60); // Adding 60 seconds
-    $serverName = gethostname(); // $config->get('serverName');
+    $notBefore  = $issuedAt;
+    $expire     = $notBefore + (JWT_EXPIRE*60);
+    $serverName = gethostname();
     $secretKey = base64_decode(JWT_SECRET);
     // Create the token as an array
     $data = [
@@ -80,7 +86,7 @@ Class Authenticate {
     $codeAlphabet.= "0123456789";
     $max = strlen($codeAlphabet) - 1;
     for ($i=0; $i < $length; $i++) {
-      $rand = Authenticate::crypto_rand_secure(0, $max);
+      $rand = self::crypto_rand_secure(0, $max);
       $token .= $codeAlphabet[$rand];
     }
     return $token;

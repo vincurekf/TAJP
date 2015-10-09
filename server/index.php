@@ -3,10 +3,8 @@
 require 'vendor/autoload.php';
 // include config
 require 'config/config.php';
-// require helpers autoload
-require 'helpers/autoload.php';
-// require APIs autoload
-require 'api/autoload.php';
+// automacally require API classes and helpers
+require 'autoload.php';
 
 // Initialize database connection
 $database = new medoo([
