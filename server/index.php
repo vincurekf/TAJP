@@ -5,7 +5,7 @@ require 'vendor/autoload.php';
 require 'config/config.php';
 // require helpers autoload
 require 'helpers/autoload.php';
-// require API autoload
+// require APIs autoload
 require 'api/autoload.php';
 
 // Initialize database connection
@@ -46,20 +46,14 @@ $app->add(new \CorsSlim\CorsSlim( array(
 
 // get all users
 $app->get('/api/users', function () use ($app, $database) {
-  $users = $database->select("accounts","*");
+  $users = UsersAPI::get( $database );
   echo json_encode( $users );
 });
 // add new user
 $app->post('/api/users', function () use ($app, $database) {
-  /*
-    // Insert entry
-    $last_user_id = $database->insert('accounts', [
-      'user_name' => 'foo',
-      'user_email' => 'foo@bar.com',
-      'password' => 'pass'
-    ]);
-    echo $last_user_id;
-  */
+  $data = json_decode( $app->request->getBody() );
+  $userId = UsersAPI::post( $database, $data );
+  echo $userId;
 });
 // update user
 $app->put('/api/users', function () use ($app, $database) {
@@ -73,9 +67,9 @@ $app->delete('/api/users', function () use ($app, $database) {
  * based on given username and password
  */
 $app->post('/login', function () use ($app, $database) {
-  $credentials = json_decode($app->request->getBody());
+  $credentials = json_decode( $app->request->getBody() );
   // log in the user with given credentials
-  $loginStatus = Login( $credentials, $database );
+  $loginStatus = Authenticate::login( $credentials, $database );
   // return the succes/error state to javascript
   echo json_encode( $loginStatus );
 });
