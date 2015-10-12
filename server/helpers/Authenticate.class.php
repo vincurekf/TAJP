@@ -21,7 +21,8 @@ Class Authenticate {
       $db_name = $user["user_name"];
       $db_password = $user["password"];
       // if password matches
-      if( $db_password === $credentials->password ){
+      $passHash = base64_encode(hash_hmac('sha256', $credentials->password, JWT_SECRET, true));
+      if( $db_password === $passHash ){
         $jwt = self::generateToken( $db_id, $db_name );
         $database->update("accounts", [
           "last_login" => date("Y-m-d H:i:s"),
@@ -54,8 +55,8 @@ Class Authenticate {
       'nbf'  => $notBefore,         // Not before
       'exp'  => $expire,            // Expire
       'data' => [                   // Data related to the signer user
-        'userId'   => $user_id,       // userid from the users table
-        'userName' => $user_name,     // User name
+        'user_id'   => $user_id,       // userid from the users table
+        'user_name' => $user_name,     // User name
       ]
     ];
     // encode with JWT
@@ -65,6 +66,9 @@ Class Authenticate {
       'HS512'     // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
     );
     return $jwt;
+  }
+  public function reissueToken( $user_id, $user_name ){
+    return self::generateToken( $user_id, $user_name );
   }
   private function crypto_rand_secure($min, $max){
     $range = $max - $min;

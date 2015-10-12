@@ -9,11 +9,11 @@ require 'autoload.php';
 // Initialize database connection
 $database = new medoo([
   'database_type' => 'mysql',
-  'database_name' => 'test',
+  'charset' => 'utf8',
+  'database_name' => DB_NAME,
   'server' => DB_HOST,
   'username' => DB_USER,
-  'password' => DB_PASS,
-  'charset' => 'utf8'
+  'password' => DB_PASS
 ]);
 
 /*
@@ -29,7 +29,11 @@ $app->add(new \Slim\Middleware\JwtAuthentication([
   "secret" => base64_decode(JWT_SECRET),
   "path" => ["/api"] ,
   "callback" => function ($options) use ($app) {
-    $app->jwt = $options["decoded"];
+    $app->oldJwt = $options["decoded"];
+    $decodedData =  (array) $app->oldJwt->data;
+    $user_id = $decodedData['user_id'];
+    $user_name = $decodedData['user_name'];
+    $app->newToken = Authenticate::reissueToken( $user_id, $user_name );// $options["decoded"];
   }
 ]));
 // 3
@@ -41,17 +45,17 @@ $app->add(new \CorsSlim\CorsSlim( array(
 /*
  * API ROUTES
  */
-
 // get all users
 $app->get('/api/users', function () use ($app, $database) {
-  $users = UsersAPI::get( $database );
-  echo json_encode( $users );
+  $resultArr['token'] = $app->newToken;
+  $resultArr['result'] = UsersAPI::get( $database );
+  echo json_encode( $resultArr );
 });
 // add new user
 $app->post('/api/users', function () use ($app, $database) {
   $data = json_decode( $app->request->getBody() );
-  $userId = UsersAPI::post( $database, $data );
-  echo $userId;
+  $user_id = UsersAPI::post( $database, $data );
+  echo $user_id;
 });
 // update user
 $app->put('/api/users', function () use ($app, $database) {
@@ -76,8 +80,8 @@ $app->post('/login', function () use ($app, $database) {
  */
 $app->post('/register', function () use ($app, $database) {
   $data = json_decode( $app->request->getBody() );
-  $userId = UsersAPI::post( $database, $data );
-  echo json_encode( $userId );
+  $user_id = UsersAPI::post( $database, $data );
+  echo json_encode( $user_id );
 });
 
 // Run Slim app

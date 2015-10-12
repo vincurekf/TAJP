@@ -18,12 +18,12 @@ app.run(['$rootScope', '$location', '$http', 'jwtHelper', 'tokenService', functi
   }
 
   /*
-   * Login function
+   * Global login function
    */
   $rootScope.login = function ( credentials, stay, callback ) {
-    console.log( credentials );
     username = credentials.username;
-    password = credentials.password;
+    password = CryptoJS.SHA512(credentials.password).toString();
+    console.log( username, password );
     $rootScope.dataLoading = true;
     tokenService.Login(username, password, function(response) {
       if(response.success) {
@@ -31,7 +31,7 @@ app.run(['$rootScope', '$location', '$http', 'jwtHelper', 'tokenService', functi
         if( credentials.keeplogged ){
           window.localStorage['keeplogged'] = 1;
           window.localStorage['username'] = username;
-          window.localStorage['password'] = password;
+          window.localStorage['password'] = CryptoJS.SHA512(password).toString();
         };
         if( !stay ){
           console.log( 'stay' );  
@@ -46,7 +46,34 @@ app.run(['$rootScope', '$location', '$http', 'jwtHelper', 'tokenService', functi
       }
     });
   };
-
+  /*
+   * Global logout function
+   * logout user and redirect to /login page
+   */
+  $rootScope.logout = function () {
+    tokenService.clear();
+    $rootScope.globals.token = {};
+    window.localStorage['jwt_token'] = '';
+    window.localStorage['keeplogged'] = 0;
+    window.localStorage['username'] = '';
+    window.localStorage['password'] = '';
+    $location.path('/login');
+  };
+  /*
+   * Check validity or existence of token
+   */
+  $rootScope.checkToken = function(){
+    // Check if the token is empty
+    var isEmpty = Object.keys( $rootScope.globals.token ).length === 0 ? true : false;
+    // or if is expired
+    var isExpired = !isEmpty ? jwtHelper.isTokenExpired( $rootScope.globals.token ) : false;
+    // and redirect
+    if( isExpired ){
+      tokenService.clear();
+    }else{
+      $location.path('/');
+    }
+  };
   /*
    * listen for redirecting (changing paths/views)
    * and check if there is valit token
@@ -58,18 +85,15 @@ app.run(['$rootScope', '$location', '$http', 'jwtHelper', 'tokenService', functi
     var targetPath = $location.path();
     var targetSearch = $location.search();
     var targetHash = $location.hash();
-    console.log( targetPath );
     var isEmpty = Object.keys( $rootScope.globals.token ).length === 0 ? true : false;
     var isExpired = !isEmpty ? jwtHelper.isTokenExpired( $rootScope.globals.token ) : false;
     var keeplogged = parseInt( window.localStorage['keeplogged'] ) === 1 ? true : false;
-    console.log( keeplogged );
     // redirect to login page if not logged in
     if ( ($location.path() !== '/login' && $location.path() !== '/register' && !window.localStorage['jwt_token']) || isExpired ) {
       if( keeplogged ){
         var credentials = {
           username: window.localStorage['username'],
-          password: window.localStorage['password'],
-          keeplogged: window.localStorage['keeplogged']
+          password: window.localStorage['password']
         }
         console.log('login from brains')
         $rootScope.login( credentials, true, function(){
@@ -81,15 +105,31 @@ app.run(['$rootScope', '$location', '$http', 'jwtHelper', 'tokenService', functi
       }
     }
   });
-  //
+
 }]);
   
 app.config(['$routeProvider', '$httpProvider', 'jwtInterceptorProvider', 
 function ( $routeProvider, $httpProvider, jwtInterceptorProvider ) {
+  
+  // hook into $httpProvider and add token to all requests
   jwtInterceptorProvider.tokenGetter = function() {
     return window.localStorage['jwt_token'];
   }; $httpProvider.interceptors.push('jwtInterceptor');
+  // update token after every request
+  var updateToken = function ($q, $location) {
+    return {
+      response: function (result) {
+        //hide your loading message
+        if(result.data.token){
+          window.localStorage['jwt_token'] = result.data.token;
+        }
+        return result;
+      }
+    }
+  };
+  $httpProvider.interceptors.push(updateToken);
 
+  // set routes
   $routeProvider
   .when('/login', {
     controller: 'LoginController',

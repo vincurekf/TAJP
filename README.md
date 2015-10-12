@@ -16,16 +16,26 @@ Change the settings in **server/config/config.php**:
 define("DB_HOST", "localhost");
 define("DB_USER", "root");
 define("DB_PASS", "passwd");
+define("DB_NAME", "test");
+
+// Password salt
+define('PASS_SALT', "some_strong_random_string");
+
 // Json Web Tokens
-define("JWT_SECRET", "z0Q5SrbSOhRU0YvHFE8CRav9I0OIg6TMYt4+jpLwk3w3QqfUMVYQ3C2ntOKV82A6YWo1vrhm3ZcaDzjcVYsBAw==");
+// Secret key, change this to your unique key, do not share or public anywhere
+define("JWT_SECRET", "some_strong_random_string");
+// Expiration of cookies in minutes
+define("JWT_EXPIRE", 15);
 ```
-Change the server address in **client/js/app.js**:
+Change the server address in **client/js/app.js** (right on the top):
 ```javascript
-$rootScope.globals.serverUrl = 'http://localhost/tajp/server';
+$rootScope.globals = {
+	serverUrl: 'http://localhost/tajp/server'
+}
 ```
 
 Run **_install/create_table.sql** in your mysql database manager (phpmyadmin, adminer).
-This will create table 'test' and insert foo user.
+This will create table 'accounts'.
 
 And you are good to go.
 

@@ -4,6 +4,7 @@
     
     <h3>Register new account</h3>
     <div ng-show="error" class="alert alert-danger">{{error}}</div>
+    <div ng-show="success" class="alert alert-danger">{{success}}</div>
     <form name="form" ng-submit="register(newUser)" role="form">
       <label for="user_name">Username</label>
       <input type="text" name="user_name" id="user_name" class="form-control" ng-model="newUser.user_name" required />
