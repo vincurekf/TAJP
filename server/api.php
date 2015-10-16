@@ -6,16 +6,6 @@ require 'config/config.php';
 // automacally require API classes and helpers
 require 'autoload.php';
 
-// Initialize database connection
-$database = new medoo([
-  'database_type' => 'mysql',
-  'charset' => 'utf8',
-  'database_name' => DB_NAME,
-  'server' => DB_HOST,
-  'username' => DB_USER,
-  'password' => DB_PASS
-]);
-
 /*
  * Configure Slim app
  * 1. Create Slim app

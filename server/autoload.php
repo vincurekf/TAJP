@@ -10,8 +10,8 @@ $folders = Array('api', 'helpers');
 
 foreach ( $folders as $folder) {
   foreach (glob($folder.'/*.php') as $filename){
-	  if ( $filename != "autoload.php") {
-    	require_once $filename;
-	  }
-	}
+    if ( $filename != "autoload.php") {
+      require_once $filename;
+    }
+  }
 }
