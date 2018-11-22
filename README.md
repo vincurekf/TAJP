@@ -1,4 +1,4 @@
-# TAJP - Template Angular+Javascript+PHP
+# [Discontinued] - TAJP - Template Angular+Javascript+PHP
 
 Supersimple template/boilerplate for starting small projects with separated client side and server/api.
 
@@ -48,6 +48,3 @@ And you are good to go.
 
 ## License
 Released under [MIT license](http://opensource.org/licenses/MIT), Copyright © 2015 Filip Vincůrek
-
-## WIP
-Still in active development.
